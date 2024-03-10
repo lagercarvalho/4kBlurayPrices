@@ -17,6 +17,7 @@ pages = [list(map(int, page.split('–'))) for page in form_data]
 print(f'Importing {pages[-1][-1]} movies')
 
 movies = {
+    'vendor': [],
     'title': [],
     'c_price': [],
     'p_price': [],
@@ -44,6 +45,7 @@ for index, page in enum:
         p_price_tag = movie.find("span", class_="normal-price")
         p_price = int(re.search(r'\b\d+\b', p_price_tag.get_text(strip=True)).group()) if p_price_tag else c_price
 
+        movies['vendor'].append('imusic')
         movies['title'].append(movie.find("a", title=True)['title'])
         movies['c_price'].append(c_price)
         movies['p_price'].append(p_price)

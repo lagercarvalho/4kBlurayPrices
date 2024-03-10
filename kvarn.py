@@ -19,6 +19,7 @@ total_movies = page.json()['result']
 print(f'Importing {total_movies} movies')
 
 movies = {
+    'vendor': [],
     'title': [],
     'c_price': [],
     'p_price': [],
@@ -50,6 +51,7 @@ for x in enum:
         prev_price = pricing_info['regular']['incVat']['SEK']
         curr_price = pricing_info['specialOffer']['incVat']['SEK'] if 'specialOffer' in pricing_info else prev_price
 
+        movies['vendor'].append('kvarn')
         movies['title'].append(movie['name']['sv'])
         movies['c_price'].append(curr_price)
         movies['p_price'].append(prev_price)

@@ -16,6 +16,7 @@ pages = int(home_soup.find_all("li", class_="pagination__page")[-1].text)
 print(f'Importing {pages} pages')
 
 movies = {
+    'vendor': [],
     'title': [],
     'c_price': [],
     'p_price': [],
@@ -33,13 +34,14 @@ for page in enum:
     page_movies = page_soup.find_all("a", class_="p-c")
 
     for movie in page_movies:
-
-        price_text = movie.find("span", class_="p-c__current-price").get_text(strip=True)
-        c_price = int(re.search(r'\b\d+\b', price_text).group())
+        regex = r'\d+(?:,\d+)?'
+        price_text = movie.find("span", class_="p-c__current-price").get_text(strip=True).replace(' ', '')
+        c_price = float(re.search(regex, price_text).group().replace(',','.'))
 
         p_price_tag = movie.find("span", class_="p-c__original-price-number")
-        p_price = int(re.search(r'\b\d+\b', p_price_tag.get_text(strip=True)).group()) if p_price_tag else c_price
+        p_price = float(re.search(regex, p_price_tag.get_text(strip=True).replace(' ', '')).group().replace(',','.')) if p_price_tag else c_price
 
+        movies['vendor'].append('cdon')
         movies['title'].append(movie.find("span", class_="p-c__title").get_text(strip=True))
         movies['c_price'].append(c_price)
         movies['p_price'].append(p_price)
