@@ -1,1 +1,3 @@
 data/
+postgres/postgres-data/pgdata/*
+postgres/passwd
