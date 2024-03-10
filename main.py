@@ -9,8 +9,17 @@ conn = psycopg2.connect(database="postgres",
 
 cursor = conn.cursor()
 
-truncate_query = "TRUNCATE TABLE movies;"
-cursor.execute(truncate_query)
+create_query = f"""
+CREATE TABLE IF NOT EXISTS movies(
+    vendor varchar(32) not null,
+	title varchar(256) not null,
+	current_price real not null,
+	previous_price real not null,
+	sale real
+);
+TRUNCATE TABLE movies;
+"""
+cursor.execute(create_query)
 conn.commit()
 
 for file in os.listdir('data'):
