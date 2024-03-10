@@ -39,11 +39,16 @@ for index, page in enum:
     page_movies = page_soup.find_all("div", class_="list-item")
 
     for movie in page_movies:
-        price_text = movie.find("a", class_="price").get_text(strip=True)
-        c_price = int(re.search(r'\b\d+\b', price_text).group())
+        regex = r'\d+(?:,\d+)?'
+        price_text = movie.find("a", class_="price").get_text(strip=True).replace(".", "")
+        c_price = float(re.search(regex, price_text).group().replace(",", "."))
 
         p_price_tag = movie.find("span", class_="normal-price")
-        p_price = int(re.search(r'\b\d+\b', p_price_tag.get_text(strip=True)).group()) if p_price_tag else c_price
+        if p_price_tag:
+            p_price_text = p_price_tag.get_text(strip=True).replace(".", "")
+            p_price = float(re.search(regex, p_price_text).group().replace(",", "."))
+        else:
+            p_price = c_price
 
         movies['vendor'].append('imusic')
         movies['title'].append(movie.find("a", title=True)['title'])

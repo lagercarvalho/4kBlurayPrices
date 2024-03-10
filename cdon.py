@@ -35,11 +35,15 @@ for page in enum:
 
     for movie in page_movies:
         regex = r'\d+(?:,\d+)?'
-        price_text = movie.find("span", class_="p-c__current-price").get_text(strip=True).replace(' ', '')
+        price_text = movie.find("span", class_="p-c__current-price").get_text(strip=True).replace("\xa0", "")
         c_price = float(re.search(regex, price_text).group().replace(',','.'))
 
         p_price_tag = movie.find("span", class_="p-c__original-price-number")
-        p_price = float(re.search(regex, p_price_tag.get_text(strip=True).replace(' ', '')).group().replace(',','.')) if p_price_tag else c_price
+        if p_price_tag:
+            p_price_text = p_price_tag.get_text(strip=True).replace("\xa0", "")
+            p_price = float(re.search(regex, p_price_text).group().replace(',','.'))
+        else:
+            p_price = c_price
 
         movies['vendor'].append('cdon')
         movies['title'].append(movie.find("span", class_="p-c__title").get_text(strip=True))
