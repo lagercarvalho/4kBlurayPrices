@@ -4,6 +4,7 @@ services:
     image: postgres
     restart: always
     environment:
+      POSTGRES_DB: bluray
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       PGDATA: /var/lib/postgresql/data/pgdata

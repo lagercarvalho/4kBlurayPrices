@@ -1,11 +1,17 @@
 import psycopg2
 import os
+import json
 
-conn = psycopg2.connect(database="postgres",
-                        host="localhost",
-                        user="postgres",
-                        password="mysecretpassword",
-                        port="5432")
+with open("config.json", "r") as f:
+    config = json.load(f)["database"]
+
+conn = psycopg2.connect(
+    database=config["name"],
+    host=config["host"],
+    user=config["user"],
+    password=config["password"],
+    port=config["port"],
+)
 
 cursor = conn.cursor()
 
@@ -22,13 +28,13 @@ TRUNCATE TABLE movies;
 cursor.execute(create_query)
 conn.commit()
 
-for file in os.listdir('data'):
-    vendor = file[:-4] if file.endswith('.csv') else None
+for file in os.listdir("data"):
+    vendor = file[:-4] if file.endswith(".csv") else None
     if not vendor:
         continue
 
-    with open(f'data/{file}', 'r') as f:
-        print(f'Importing {file} into {vendor} database')
+    with open(f"data/{file}", "r") as f:
+        print(f"Importing {file} into {vendor} database")
         copy_query = f"""
         COPY movies FROM '/var/lib/csv/{file}'
         DELIMITER ',' CSV HEADER;
@@ -39,5 +45,3 @@ conn.commit()
 
 cursor.close()
 conn.close()
-
-
