@@ -5,9 +5,11 @@ import pandas as pd
 import re
 from tqdm import tqdm
 import json
+import os
 
 def scrape_imusic():
-    with open("../config.json", "r") as f:
+    script_dir = os.path.dirname(os.path.realpath(__file__))
+    with open(f"{script_dir}/../config.json", "r") as f:
         config = json.load(f)["imusic"]
 
     url = config["url"]
@@ -22,12 +24,12 @@ def scrape_imusic():
     )
     pages = [list(map(int, page.split("–"))) for page in form_data]
 
-    movies = {"vendor": [], "title": [], "c_price": [], "p_price": [], "sale": [], "img_src":[], "list_src":[]}
+    movies = {"vendor": [], "title": [], "c_price": [], "p_price": [], "sale": [], "status": [], "img_src":[], "list_src":[]}
 
     enum = enumerate(pages)
     if "-v" in sys.argv:
         print(f"Importing {pages[-1][-1]} movies")
-        enum = tqdm(enum, total=len(pages), desc="Processing pages")
+        enum = tqdm(enum, total=len(pages), desc="Processing iMusic pages")
 
     for index, page in enum:
 
@@ -62,10 +64,11 @@ def scrape_imusic():
             movies["c_price"].append(c_price)
             movies["p_price"].append(p_price)
             movies["sale"].append((p_price - c_price) / p_price)
+            movies["status"].append(None)
 
 
     df = pd.DataFrame(movies)
-    df.to_csv("../data/imusic.csv", index=False)
+    df.to_csv(f"{script_dir}/../data/imusic.csv", index=False)
     
     if "-v" in sys.argv:
         print("Importing complete, CSV data stored")

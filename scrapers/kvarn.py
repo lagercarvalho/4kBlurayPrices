@@ -4,10 +4,11 @@ import sys
 import math
 from tqdm import tqdm
 import json
+import os
 
 def scrape_kvarn():
-
-    with open("../config.json", "r") as f:
+    script_dir = os.path.dirname(os.path.realpath(__file__))
+    with open(f"{script_dir}/../config.json", "r") as f:
         config = json.load(f)["kvarn"]
 
     url = config["url"]
@@ -15,14 +16,14 @@ def scrape_kvarn():
     page = requests.post(url, json=config["json"])
     total_movies = page.json()["result"]
 
-    movies = {"vendor": [], "title": [], "c_price": [], "p_price": [], "sale": [], "img_src":[], "list_src":[]}
+    movies = {"vendor": [], "title": [], "c_price": [], "p_price": [], "sale": [], "status": [], "img_src":[], "list_src":[]}
 
     rounds = math.ceil(total_movies / 100)
 
     enum = range(1, rounds + 1)
     if "-v" in sys.argv:
         print(f"Importing {total_movies} movies")
-        enum = tqdm(enum, desc="Processing pages")
+        enum = tqdm(enum, desc="Processing Kvarn pages")
 
     for x in enum:
         body = {
@@ -67,9 +68,10 @@ def scrape_kvarn():
             movies["c_price"].append(curr_price)
             movies["p_price"].append(prev_price)
             movies["sale"].append((prev_price - curr_price) / prev_price)
+            movies["status"].append(None)
 
     df = pd.DataFrame(movies)
-    df.to_csv("../data/kvarn.csv", index=False)
+    df.to_csv(f"{script_dir}/../data/kvarn.csv", index=False)
 
     if "-v" in sys.argv:
         print("Importing complete, CSV data stored")

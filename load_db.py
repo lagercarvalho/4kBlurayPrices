@@ -1,6 +1,7 @@
 import psycopg2
 import os
 import json
+import sys
 from scrapers import cdon, kvarn, imusic
 
 with open("config.json", "r") as f:
@@ -22,31 +23,34 @@ CREATE TABLE IF NOT EXISTS movies(
     title varchar(256) not null,
     current_price real not null,
     previous_price real not null,
-    sale real
+    sale real,
+    status varchar(32),
+    img_src varchar(256),
+    list_src varchar(256)
 );
 TRUNCATE TABLE movies;
 """
 cursor.execute(create_query)
 conn.commit()
 
-cdon.scrape_cdon()
-kvarn.scrape_kvarn()
-imusic.scrape_imusic()
-
-print("CSV files loaded")
+if "-s" in sys.argv:
+    cdon.scrape_cdon()
+    kvarn.scrape_kvarn()
+    imusic.scrape_imusic()
+else:
+    print("use -s to run all scrapers")
 
 for file in os.listdir("data"):
     vendor = file[:-4] if file.endswith(".csv") else None
     if not vendor:
         continue
 
-    with open(f"data/{file}", "r") as f:
-        print(f"Importing {file} into {vendor} database")
-        copy_query = f"""
-        COPY movies FROM '/var/lib/csv/{file}'
-        DELIMITER ',' CSV HEADER;
-        """
-        cursor.execute(copy_query)
+    print(f"Importing {file}")
+    copy_query = f"""
+    COPY movies FROM '/var/lib/csv/{file}'
+    DELIMITER ',' CSV HEADER;
+    """
+    cursor.execute(copy_query)
 
 conn.commit()
 

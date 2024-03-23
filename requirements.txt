@@ -1,5 +1,6 @@
-beautifulsoup4==4.12.3
-pandas==2.2.1
-requests==2.31.0
-tqdm==4.66.2
-psycopg2==2.9.9
+beautifulsoup4
+pandas
+requests
+tqdm
+psycopg2
+flask

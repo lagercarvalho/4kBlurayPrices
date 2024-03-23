@@ -5,9 +5,11 @@ import pandas as pd
 import re
 from tqdm import tqdm
 import json
+import os
 
 def scrape_cdon():
-    with open("../config.json", "r") as f:
+    script_dir = os.path.dirname(os.path.realpath(__file__))
+    with open(f"{script_dir}/../config.json", "r") as f:
         config = json.load(f)["cdon"]
 
     url = config["url"]
@@ -17,11 +19,11 @@ def scrape_cdon():
     home_soup = BeautifulSoup(home_page.text, "html.parser")
     pages = int(home_soup.find_all("li", class_="pagination__page")[-1].text)
 
-    movies = {"vendor": [], "title": [], "c_price": [], "p_price": [], "sale": [], "img_src":[], "list_src":[]}
+    movies = {"vendor": [], "title": [], "c_price": [], "p_price": [], "sale": [], "status":[] , "img_src":[], "list_src":[]}
 
     enum = range(pages)
     if "-v" in sys.argv:
-        enum = tqdm(enum, desc="Processing pages")
+        enum = tqdm(enum, desc="Processing CDON pages")
 
     for page in enum:
 
@@ -30,6 +32,7 @@ def scrape_cdon():
         page_movies = page_soup.find_all("a", class_="p-c")
 
         for movie in page_movies:
+            payload = json.loads(movie["data-payload"])
             regex = r"\d+(?:,\d+)?"
             price_text = (
                 movie.find("span", class_="p-c__current-price")
@@ -52,10 +55,11 @@ def scrape_cdon():
             movies["c_price"].append(c_price)
             movies["p_price"].append(p_price)
             movies["sale"].append((p_price - c_price) / p_price)
+            movies["status"].append(payload["productState"])
 
 
     df = pd.DataFrame(movies)
-    df.to_csv("../data/cdon.csv", index=False)
+    df.to_csv(f"{script_dir}/../data/cdon.csv", index=False)
 
     if "-v" in sys.argv:
         print("Importing complete, CSV data stored")
