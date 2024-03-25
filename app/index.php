@@ -1,11 +1,17 @@
+<?php
+    require_once("db.php");
+    $script_dir = dirname(__FILE__);
+    $sale_rows = fetch(sale: "true");
+    $sale_steelbooks = fetch(sale: "true", title:"steelbook");
+    $bookable_movies = fetch(status:"bookable");
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{ url_for('static', filename= 'css/style.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename= 'css/movies.css') }}">
-    <!-- <link rel="stylesheet" href="../static/css/style.css"> -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/movies.css">
     <title>4k Bluray</title>
 </head>
 <body>
@@ -13,7 +19,7 @@
         <nav>
             <a class="logo">Bluray Paradise</a>
             <ul class="nav_menu">
-                <li class="nav_link active"><a href="/">Home</a></li>
+                <li class="nav_link active"><a href="<?php echo $script_dir; ?>">Home</a></li>
                 <li class="nav_link"><a href="#">Collection</a></li>
                 <li class="nav_link"><a href="#">Wishlist</a></li>
                 <li class="nav_link"><a href="#">Explore</a></li>
@@ -39,91 +45,86 @@
         <section>
             <h1 class="title">Top Sales</h1>
             <div class="content_container">
-                {% for movie in sale_rows %}
+                <?php foreach ($sale_rows as $movie): ?>
                     <div class="movie_container top_sale fade">
                         <div class="poster">
-                            <a href="{{ movie.list_src }}" target="_blank"><img src="{{ movie.img_src }}" alt="{{ movie.title }}"></a>
+                            <a href="<?php echo $movie['list_src']; ?>" target="_blank"><img src="<?php echo $movie['img_src']; ?>" alt="<?php echo $movie['title']; ?>"></a>
                         </div>
                         <div class="movie_info">
                             <div class="title_container">
-                                <p>{{ movie.title }}</p>
+                                <p><?php echo $movie['title']; ?></p>
                             </div>
                             <div class="price_container">
-                                <span>{{ movie.current_price }}kr</span>
-                                {% if movie.sale != 0 %}
-                                    <span class="old">{{ movie.previous_price }}kr</span>
-                                    <span class="sale">{{ '%.0f' % (movie.sale * 100) }}%</span>
-                                {% endif %}
+                                <span><?php echo $movie['current_price']; ?>kr</span>
+                                <?php if ($movie['sale'] != 0): ?>
+                                    <span class="old"><?php echo $movie['previous_price']; ?>kr</span>
+                                    <span class="sale"><?php echo sprintf("%.0f", $movie['sale'] * 100); ?>%</span>
+                                <?php endif; ?>
                             </div>
                         </div>
                     </div>
-                {% endfor %}
+                <?php endforeach; ?>
                 <a class="slider-arrow left" onclick="prevSlide('top_sale')">&#10094;</a>
                 <a class="slider-arrow right" onclick="nextSlide('top_sale')">&#10095;</a>
             </div>
-            
         </section>
 
         <section>
             <h1 class="title">Steelbook sales</h1>
-
             <div class="content_container">
-                {% for movie in sale_steelbooks %}
+                <?php foreach ($sale_steelbooks as $movie): ?>
                     <div class="movie_container sale_steelbooks fade">
                         <div class="poster">
-                            <a href="{{ movie.list_src }}" target="_blank"><img src="{{ movie.img_src }}" alt="{{ movie.title }}"></a>
+                            <a href="<?php echo $movie['list_src']; ?>" target="_blank"><img src="<?php echo $movie['img_src']; ?>" alt="<?php echo $movie['title']; ?>"></a>
                         </div>
                         <div class="movie_info">
                             <div class="title_container">
-                                <p>{{ movie.title }}</p>
+                                <p><?php echo $movie['title']; ?></p>
                             </div>
                             <div class="price_container">
-                                <span>{{ movie.current_price }}kr</span>
-                                {% if movie.sale != 0 %}
-                                    <span class="old">{{ movie.previous_price }}kr</span>
-                                    <span class="sale">{{ '%.0f' % (movie.sale * 100) }}%</span>
-                                {% endif %}
+                                <span><?php echo $movie['current_price']; ?>kr</span>
+                                <?php if ($movie['sale'] != 0): ?>
+                                    <span class="old"><?php echo $movie['previous_price']; ?>kr</span>
+                                    <span class="sale"><?php echo sprintf("%.0f", $movie['sale'] * 100); ?>%</span>
+                                <?php endif; ?>
                             </div>
                         </div>
                     </div>
-                {% endfor %}
+                <?php endforeach; ?>
                 <a class="slider-arrow left" onclick="prevSlide('sale_steelbooks')">&#10094;</a>
                 <a class="slider-arrow right" onclick="nextSlide('sale_steelbooks')">&#10095;</a>
             </div>
-            
         </section>
 
         <section>
             <h1 class="title">Coming soon</h1>
-
             <div class="content_container">
-                {% for movie in bookable_movies %}
+                <?php foreach ($bookable_movies as $movie): ?>
                     <div class="movie_container bookable_movies fade">
                         <div class="poster">
-                            <a href="{{ movie.list_src }}" target="_blank"><img src="{{ movie.img_src }}" alt="{{ movie.title }}"></a>
+                            <a href="<?php echo $movie['list_src']; ?>" target="_blank"><img src="<?php echo $movie['img_src']; ?>" alt="<?php echo $movie['title']; ?>"></a>
                         </div>
                         <div class="movie_info">
                             <div class="title_container">
-                                <p>{{ movie.title }}</p>
+                                <p><?php echo $movie['title']; ?></p>
                             </div>
                             <div class="price_container">
-                                <span>{{ movie.current_price }}kr</span>
-                                {% if movie.sale != 0 %}
-                                    <span class="old">{{ movie.previous_price }}kr</span>
-                                    <span class="sale">{{ '%.0f' % (movie.sale * 100) }}%</span>
-                                {% endif %}
+                                <span><?php echo $movie['current_price']; ?>kr</span>
+                                <?php if ($movie['sale'] != 0): ?>
+                                    <span class="old"><?php echo $movie['previous_price']; ?>kr</span>
+                                    <span class="sale"><?php echo sprintf("%.0f", $movie['sale'] * 100); ?>%</span>
+                                <?php endif; ?>
                             </div>
                         </div>
                     </div>
-                {% endfor %}
+                <?php endforeach; ?>
                 <a class="slider-arrow left" onclick="prevSlide('bookable_movies')">&#10094;</a>
                 <a class="slider-arrow right" onclick="nextSlide('bookable_movies')">&#10095;</a>
             </div>
-            
         </section>
     </div>
 
-    <script src="{{ url_for('static', filename='js/animations.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/slides.js') }}"></script>
+    <script src="js/animations.js"></script>
+    <script src="js/slides.js"></script>
 </body>
 </html>
