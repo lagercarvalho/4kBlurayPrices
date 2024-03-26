@@ -1,0 +1,15 @@
+version: '3'
+services:
+  mysqlDB:
+    image: mysql-csv
+    restart: always
+    environment:
+      MYSQL_DATABASE: bluray
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./mysql-data:/var/lib/mysql
+      - ../data:/var/lib/csv

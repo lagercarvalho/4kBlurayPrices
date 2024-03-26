@@ -1,22 +1,21 @@
-import psycopg2
+import mysql.connector
 import os
 import json
 import sys
 from scrapers import cdon, kvarn, imusic
 
 with open("config.json", "r") as f:
-    config = json.load(f)["database"]
+    config = json.load(f)["mysql"]
 
-conn = psycopg2.connect(
+conn = mysql.connector.connect(
     database=config["name"],
     host=config["host"],
     user=config["user"],
     password=config["password"],
-    port=config["port"],
+    port=config["port"]
 )
 
 cursor = conn.cursor()
-
 create_query = f"""
 CREATE TABLE IF NOT EXISTS movies(
     vendor varchar(32) not null,
@@ -28,9 +27,14 @@ CREATE TABLE IF NOT EXISTS movies(
     img_src varchar(256),
     list_src varchar(256)
 );
-TRUNCATE TABLE movies;
 """
 cursor.execute(create_query)
+cursor.fetchall()
+conn.commit()
+
+truncate_query = "TRUNCATE TABLE movies;"
+cursor.execute(truncate_query)
+cursor.fetchall()
 conn.commit()
 
 if "-s" in sys.argv:
@@ -47,12 +51,16 @@ for file in os.listdir("data"):
 
     print(f"Importing {file}")
     copy_query = f"""
-    COPY movies FROM '/var/lib/csv/{file}'
-    DELIMITER ',' CSV HEADER;
+    LOAD DATA INFILE '/var/lib/csv/{file}'
+    INTO TABLE movies
+    FIELDS TERMINATED BY ',' 
+    ENCLOSED BY '"'
+    LINES TERMINATED BY '\\r\\n'
+    IGNORE 1 LINES;
     """
     cursor.execute(copy_query)
-
-conn.commit()
+    cursor.fetchall()
+    conn.commit()
 
 print("Data stored in DB")
 

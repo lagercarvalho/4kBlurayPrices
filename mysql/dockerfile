@@ -1,0 +1,5 @@
+FROM mysql
+
+COPY my-custom.cnf /etc/mysql/conf.d/my-custom.cnf
+
+RUN chmod 644 /etc/mysql/conf.d/my-custom.cnf
