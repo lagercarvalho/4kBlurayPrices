@@ -4,9 +4,11 @@
 
         $config_file = $script_dir . '/../config.json';
         $config_json = file_get_contents($config_file);
-        $config = json_decode($config_json, true)['database'];
+        $config = json_decode($config_json, true)['mysql'];
 
-        $dsn = "pgsql:host={$config['host']};port={$config['port']};dbname={$config['name']}";
+        $host = $config['host'];
+        $name = $config['name'];
+        $dsn = "mysql:host=$host;dbname=$name";
         $username = $config['user'];
         $password = $config['password'];
 

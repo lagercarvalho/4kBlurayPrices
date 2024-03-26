@@ -25,8 +25,11 @@ function renderAll(){
 }
 
 function prevSlide(className) {
-    if (currentIndex[className] > 0) {
+    if (currentIndex[className] - itemsPerSlide >= 0) {
         currentIndex[className] -= itemsPerSlide;
+        renderMovies(className);
+    } else {
+        currentIndex[className] = 0;
         renderMovies(className);
     }
 }
