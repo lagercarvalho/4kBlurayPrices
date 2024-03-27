@@ -49,7 +49,8 @@ def scrape_cdon():
                 p_price = c_price
 
             movies["vendor"].append("cdon")
-            movies["title"].append(movie["title"])
+            filtered_title = re.sub(r'\s*\(([^)]+)\)', '', movie["title"])
+            movies["title"].append(filtered_title)
             movies["list_src"].append(f'https://cdon.se{movie["href"]}')
             movies["img_src"].append(movie.find("img", class_="p-c__image")["src"])
             movies["c_price"].append(c_price)

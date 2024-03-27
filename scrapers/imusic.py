@@ -56,10 +56,10 @@ def scrape_imusic():
                 p_price = c_price
 
             title = movie.find("a", title=True)
-            movies["title"].append(title["title"])
+            filtered_title = re.sub(r'\s*\(([^)]+)\)', '', title["title"])
+            movies["title"].append(filtered_title)
             movies["list_src"].append(f'https://imusic.se{title["href"]}')
             movies["img_src"].append(title.find("img")["src"])
-
             movies["vendor"].append("imusic")
             movies["c_price"].append(c_price)
             movies["p_price"].append(p_price)

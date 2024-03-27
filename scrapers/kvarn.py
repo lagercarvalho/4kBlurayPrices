@@ -5,6 +5,7 @@ import math
 from tqdm import tqdm
 import json
 import os
+import re
 
 def scrape_kvarn():
     script_dir = os.path.dirname(os.path.realpath(__file__))
@@ -64,7 +65,8 @@ def scrape_kvarn():
             movies["img_src"].append(movie["images"][0])
             movies["list_src"].append(movie["url"]["sv"])
             movies["vendor"].append("kvarn")
-            movies["title"].append(movie["name"]["sv"])
+            filtered_title = re.sub(r'\s*\(([^)]+)\)', '', movie["name"]["sv"])
+            movies["title"].append(filtered_title)
             movies["c_price"].append(curr_price)
             movies["p_price"].append(prev_price)
             movies["sale"].append((prev_price - curr_price) / prev_price)
