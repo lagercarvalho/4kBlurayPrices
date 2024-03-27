@@ -1,0 +1,57 @@
+h1{
+    font-size: 30px;
+}
+
+.container {
+    padding-top: 65px;
+}
+
+.page {
+    display: flex;
+    height: calc(100dvh - 65px);
+    justify-content: center;
+    align-items: center;
+}
+
+.signup-wrap {
+    background: linear-gradient(45deg, var(--primary-2), var(--primary-3));
+    border-radius: 10px;
+    overflow: hidden;
+    padding: 2px;
+}
+
+
+.signup-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 40px;
+    padding: 60px;
+    border-radius: 10px;
+    background: var(--primary-1);
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+form input {
+    background: transparent;
+    color: white;
+    padding: 1rem;
+    border-radius: 0.3rem;
+    font-size: large;
+    border: 1px solid light-dark(rgb(118, 118, 118), rgb(133, 133, 133));
+    color-scheme: dark;
+}
+
+form button {
+    background-color: var(--primary-3);
+    cursor: pointer;
+    border-radius: 10px;
+    border: none;
+    padding: 10px 0;
+}

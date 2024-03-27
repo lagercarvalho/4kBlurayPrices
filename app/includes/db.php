@@ -2,7 +2,7 @@
     function connect_db() {
         $script_dir = dirname(__FILE__);
 
-        $config_file = $script_dir . '/../config.json';
+        $config_file = $script_dir . '/../../config.json';
         $config_json = file_get_contents($config_file);
         $config = json_decode($config_json, true)['mysql'];
 

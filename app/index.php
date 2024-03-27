@@ -1,6 +1,6 @@
 <?php
-    require_once("db.php");
-    $script_dir = dirname(__FILE__);
+    require_once("includes/db.php");
+    $script_dir = dirname(__DIR__);
     $sale_rows = fetch(sale: "true");
     $sale_steelbooks = fetch(sale: "true", title:"steelbook");
     $bookable_movies = fetch(status:"bookable");
@@ -19,11 +19,11 @@
         <nav>
             <a class="logo">Bluray Paradise</a>
             <ul class="nav_menu">
-                <li class="nav_link active"><a href="<?php echo $script_dir; ?>">Home</a></li>
+                <li class="nav_link active"><a href="index.php">Home</a></li>
                 <li class="nav_link"><a href="#">Collection</a></li>
                 <li class="nav_link"><a href="#">Wishlist</a></li>
                 <li class="nav_link"><a href="#">Explore</a></li>
-                <li class="nav_link"><a href="#">Log In</a></li>
+                <li class="nav_link"><a href="login.php">Log In</a></li>
             </ul>
             <button class="hamburger-button" aria-expanded="false">
                 <svg fill="var(--button-color)" class="hamburger" viewbox="0 0 100 100" width="100%">
@@ -42,23 +42,23 @@
     </header>
 
     <div class="container">
-        <section>
+        <section class="sec-container">
             <h1 class="title">Top Sales</h1>
             <div class="content_container">
                 <?php foreach ($sale_rows as $movie): ?>
                     <div class="movie_container top_sale fade">
                         <div class="poster">
-                            <a href="<?php echo $movie['list_src']; ?>" target="_blank"><img src="<?php echo $movie['img_src']; ?>" alt="<?php echo $movie['title']; ?>"></a>
+                            <a href="<?php echo htmlspecialchars($movie['list_src']); ?>" target="_blank"><img src="<?php echo htmlspecialchars($movie['img_src']); ?>" alt="<?php echo htmlspecialchars($movie['title']); ?>"></a>
                         </div>
                         <div class="movie_info">
                             <div class="title_container">
-                                <p><?php echo $movie['title']; ?></p>
+                                <p><?php echo htmlspecialchars($movie['title']); ?></p>
                             </div>
                             <div class="price_container">
-                                <span><?php echo $movie['current_price']; ?>kr</span>
+                                <span><?php echo htmlspecialchars($movie['current_price']); ?>kr</span>
                                 <?php if ($movie['sale'] != 0): ?>
-                                    <span class="old"><?php echo $movie['previous_price']; ?>kr</span>
-                                    <span class="sale"><?php echo sprintf("%.0f", $movie['sale'] * 100); ?>%</span>
+                                    <span class="old"><?php echo htmlspecialchars($movie['previous_price']); ?>kr</span>
+                                    <span class="sale"><?php echo htmlspecialchars(sprintf("%.0f", $movie['sale'] * 100)); ?>%</span>
                                 <?php endif; ?>
                             </div>
                         </div>
@@ -69,23 +69,23 @@
             </div>
         </section>
 
-        <section>
+        <section class="sec-container">
             <h1 class="title">Steelbook sales</h1>
             <div class="content_container">
                 <?php foreach ($sale_steelbooks as $movie): ?>
                     <div class="movie_container sale_steelbooks fade">
                         <div class="poster">
-                            <a href="<?php echo $movie['list_src']; ?>" target="_blank"><img src="<?php echo $movie['img_src']; ?>" alt="<?php echo $movie['title']; ?>"></a>
+                            <a href="<?php echo htmlspecialchars($movie['list_src']); ?>" target="_blank"><img src="<?php echo htmlspecialchars($movie['img_src']); ?>" alt="<?php echo htmlspecialchars($movie['title']); ?>"></a>
                         </div>
                         <div class="movie_info">
                             <div class="title_container">
-                                <p><?php echo $movie['title']; ?></p>
+                                <p><?php echo htmlspecialchars($movie['title']); ?></p>
                             </div>
                             <div class="price_container">
-                                <span><?php echo $movie['current_price']; ?>kr</span>
+                                <span><?php echo htmlspecialchars($movie['current_price']); ?>kr</span>
                                 <?php if ($movie['sale'] != 0): ?>
-                                    <span class="old"><?php echo $movie['previous_price']; ?>kr</span>
-                                    <span class="sale"><?php echo sprintf("%.0f", $movie['sale'] * 100); ?>%</span>
+                                    <span class="old"><?php echo htmlspecialchars($movie['previous_price']); ?>kr</span>
+                                    <span class="sale"><?php echo htmlspecialchars(sprintf("%.0f", $movie['sale'] * 100)); ?>%</span>
                                 <?php endif; ?>
                             </div>
                         </div>
@@ -96,23 +96,23 @@
             </div>
         </section>
 
-        <section>
+        <section class="sec-container">
             <h1 class="title">Coming soon</h1>
             <div class="content_container">
                 <?php foreach ($bookable_movies as $movie): ?>
                     <div class="movie_container bookable_movies fade">
                         <div class="poster">
-                            <a href="<?php echo $movie['list_src']; ?>" target="_blank"><img src="<?php echo $movie['img_src']; ?>" alt="<?php echo $movie['title']; ?>"></a>
+                            <a href="<?php echo htmlspecialchars($movie['list_src']); ?>" target="_blank"><img src="<?php echo htmlspecialchars($movie['img_src']); ?>" alt="<?php echo htmlspecialchars($movie['title']); ?>"></a>
                         </div>
                         <div class="movie_info">
                             <div class="title_container">
-                                <p><?php echo $movie['title']; ?></p>
+                                <p><?php echo htmlspecialchars($movie['title']); ?></p>
                             </div>
                             <div class="price_container">
-                                <span><?php echo $movie['current_price']; ?>kr</span>
+                                <span><?php echo htmlspecialchars($movie['current_price']); ?>kr</span>
                                 <?php if ($movie['sale'] != 0): ?>
-                                    <span class="old"><?php echo $movie['previous_price']; ?>kr</span>
-                                    <span class="sale"><?php echo sprintf("%.0f", $movie['sale'] * 100); ?>%</span>
+                                    <span class="old"><?php echo htmlspecialchars($movie['previous_price']); ?>kr</span>
+                                    <span class="sale"><?php echo htmlspecialchars(sprintf("%.0f", $movie['sale'] * 100)); ?>%</span>
                                 <?php endif; ?>
                             </div>
                         </div>
