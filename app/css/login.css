@@ -1,3 +1,16 @@
+@property --gradient-angle {
+    syntax: "<angle>";
+    initial-value: 0deg;
+    inherits: false;
+}
+
+:root {
+    --clr-1: #0c4449;
+    --clr-2: #13595f;
+    --clr-3: #2d8f85;
+    --clr-4: #41b4a9;
+}
+
 h1{
     font-size: 30px;
 }
@@ -14,10 +27,41 @@ h1{
 }
 
 .signup-wrap {
-    background: linear-gradient(45deg, var(--primary-2), var(--primary-3));
     border-radius: 10px;
-    overflow: hidden;
-    padding: 2px;
+    position: relative;
+}
+
+.signup-wrap::before,
+.signup-wrap::after {
+    content: "";
+    position: absolute;
+    inset: -0.5rem;
+    z-index: -1;
+    background: conic-gradient(
+    from var(--gradient-angle),
+    var(--clr-1),
+    var(--clr-2),
+    var(--clr-3),
+    var(--clr-4),
+    var(--clr-3),
+    var(--clr-2),
+    var(--clr-1)
+    );
+    border-radius: inherit;
+    animation: rotation 5s linear infinite;
+}
+
+.signup-wrap::after {
+    filter: blur(3.5rem);
+}
+
+@keyframes rotation {
+    0% {
+        --gradient-angle: 0deg;
+    }
+    100% {
+        --gradient-angle: 360deg;
+    }
 }
 
 
